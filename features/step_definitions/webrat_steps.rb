@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
+re File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
 
 # Commonly used webrat steps
 # http://github.com/brynary/webrat
@@ -85,6 +85,12 @@ When /^I check "([^\"]*)"$/ do |field|
   check(field) 
 end
 
+When /^I check by value "([^\"]*)"$/ do |value|
+  xpath = "//input[@value='#{value}']"
+  check(field_by_xpath(xpath))
+end
+
+
 When /^I uncheck "([^\"]*)"$/ do |field|
   uncheck(field) 
 end
@@ -128,3 +134,4 @@ end
 Then /^I should be on (.+)$/ do |page_name|
   assert_equal path_to(page_name), URI.parse(current_url).path
 end
+

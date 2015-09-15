@@ -40,6 +40,8 @@ if ($HTTP_GET_VARS["menu_id"] && $_SESSION["validuser"]) {
 	case 1335:
 		$database->_database_support($menu_id, $HTTP_POST_VARS, $HTTP_GET_VARS,$_SESSION["validuser"],$_SESSION["isadmin"]);
 		break;
+	case 1351:
+		$dental->_dental($menu_id, $HTTP_POST_VARS, $HTTP_GET_VARS,$_SESSION["validuser"],$_SESSION["isadmin"]);
 	case 1359:
 		$demographic_profile->_demographic_profile($menu_id, $HTTP_POST_VARS, $HTTP_GET_VARS,$_SESSION["validuser"],$_SESSION["isadmin"]);
 		break;
@@ -216,6 +218,9 @@ if ($HTTP_GET_VARS["menu_id"] && $_SESSION["validuser"]) {
 		break;
 	case 1336:
 		$reminder->_sms_template($menu_id, $HTTP_POST_VARS, $HTTP_GET_VARS,$_SESSION["validuser"],$_SESSION["isadmin"]);
+		break;
+	case 1361:
+		$sanitation->_consult_sanitation($menu_id, $HTTP_POST_VARS, $HTTP_GET_VARS,$_SESSION["validuser"],$_SESSION["isadmin"]);
 		break;
 	case 717:
 		$template->_templates($menu_id, $HTTP_POST_VARS, $HTTP_GET_VARS,$_SESSION["validuser"],$_SESSION["isadmin"]);

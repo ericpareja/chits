@@ -500,6 +500,17 @@ if (file_exists('../modules/reminder/class.reminder.php')) {
 		$reminder->init_help();
 	}
 }
+if (file_exists('../modules/sanitation/class.sanitation.php')) {
+	include '../modules/sanitation/class.sanitation.php';
+	$sanitation = new sanitation;
+	if (!$module->activated('sanitation') && $initmod) {
+		$sanitation->init_sql();
+		$sanitation->init_menu();
+		$sanitation->init_deps();
+		$sanitation->init_lang();
+		$sanitation->init_help();
+	}
+}
 if (file_exists('../modules/smoking/class.smoking.php')) {
 	include '../modules/smoking/class.smoking.php';
 	$smoking = new smoking;

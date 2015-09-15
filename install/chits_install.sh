@@ -66,7 +66,7 @@ if [ "$?" = 100 ] ; then
 fi
 
 # Comment out the bind address so mysql accepts non-local connections
-sed -i 's/^bind-address.*127.0.0.1/#&/' /etc/mysql/my.cnf
+sed -i 's/^\(bind-address.*127.0.0.1\)/#\1&/' /etc/mysql/my.cnf
 /etc/init.d/mysql restart
 
 chmod 777 /var/www 	# why do we need this world read-write-execute? -xenos
@@ -76,12 +76,15 @@ wget -O /etc/php5/apache2/php.ini http://github.com/mikeymckay/chits/raw/master/
 su $SUDO_USER -c "git clone git://github.com/mikeymckay/chits.git /var/www/chits"
 su $SUDO_USER -c "cp /var/www/chits/modules/_dbselect.php.sample /var/www/chits/modules/_dbselect.php"
 
+
 #echo "Creating mysql databases: live (chits_live), development (chits_development) and testing (chits_testing)"
+
 
 create_database() {
   local db_name=$1
   local user_name=$2
   local user_password=$3
+  echo "Creating database '${db_name}' with username '${user_name}' and password '${user_password}'"
 
   echo "CREATE DATABASE ${db_name};" | mysql -u root -p$MYSQL_ROOT_PASSWORD
   mysql -u root -p$MYSQL_ROOT_PASSWORD ${db_name} < /var/www/chits/db/core_data.sql
@@ -115,4 +118,54 @@ if [ "$CHITS_INSTALL_TYPE" = "2" ];
 	gem install cucumber mechanize rspec webrat --no-ri
 	cucumber /var/www/chits/features
 fi
+
+
+## START OF DATABASE BACKUP CONFIGURATION
+echo "Setting up automated database backups"
+PATH_TO_BACKUP_DIR="/var/www/chits/backups"
+
+mkdir --parents ${PATH_TO_BACKUP_DIR}
+
+# Comment out all interval and backup lines
+sed -i 's/^\(interval.*\)/#\1/' /etc/rsnapshot.conf
+sed -i 's/^\(backup.*\)/#/' /etc/rsnapshot.conf
+
+echo "Setting up backup directory as: ${PATH_TO_BACKUP_DIR}"
+sed -i 's/^snapshot_root.*/snapshot_root\t\/var\/www\/chits\/backups\//' /etc/rsnapshot.conf
+echo "
+# ------------------------------
+# Added by chits_install script
+# ------------------------------
+# Note all spaces below are TABS not normal spaces
+
+interval	hourly	3
+interval	daily	7
+interval	weekly	4
+interval	monthly	6
+
+# option      command       name_of_backup
+backup_script	/var/www/chits/scripts/dump_database.sh	chits_live
+" >> /etc/rsnapshot.conf
+
+PATH_TO_DUMP_SCRIPT="/var/www/chits/scripts/dump_database.sh"
+echo "#!/bin/bash
+# Note that the chits_live.sql should not have a path specified, rsnapshot takes care of things
+mysqldump -u chits_live -p${CHITS_LIVE_PASSWORD} chits_live > chits_live.sql
+" > ${PATH_TO_DUMP_SCRIPT}
+chmod +x ${PATH_TO_DUMP_SCRIPT}
+chmod -r ${PATH_TO_DUMP_SCRIPT}
+
+echo "
+# The values used correspond to /etc/rsnapshot.conf.
+# There you can also set the backup points and many other things.
+
+0 */4	  * * *		root	/usr/bin/rsnapshot hourly
+30 16  	* * *		root	/usr/bin/rsnapshot daily
+0  16  	* * 1		root	/usr/bin/rsnapshot weekly
+45 16  	1 * *		root	/usr/bin/rsnapshot monthly
+
+" > /etc/cron.d/rsnapshot
+
+#sed -i 's/^\# \(\d\)/\1/' /etc/rsnapshot.conf
+## END OF DATABASE BACKUP CONFIGURATION
 

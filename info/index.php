@@ -75,18 +75,6 @@ mysql_query("ALTER TABLE `content` DROP PRIMARY KEY , ADD PRIMARY KEY (`content_
 mysql_query("ALTER TABLE `m_patient_mc` DROP PRIMARY KEY, ADD PRIMARY KEY(`mc_id`)");
 mysql_query("ALTER TABLE `m_patient_fp` DROP PRIMARY KEY, ADD PRIMARY KEY(`fp_id`)");
 mysql_query("ALTER TABLE `m_patient_ccdev` DROP PRIMARY KEY, ADD PRIMARY KEY(`ccdev_id`)");
-mysql_query("ALTER TABLE `m_patient_ntp` DROP PRIMARY KEY, ADD PRIMARY KEY(`ntp_id`)"); 
-mysql_query("ALTER TABLE `m_consult_appointments` DROP PRIMARY KEY, ADD PRIMARY KEY(`schedule_id`)");
-mysql_query("ALTER TABLE `m_dental_fhsis` DROP PRIMARY KEY, ADD PRIMARY KEY(`record_number`)");
-mysql_query("ALTER TABLE `m_lib_population` DROP PRIMARY KEY, ADD PRIMARY KEY(`population_id`)");
-mysql_query("ALTER TABLE `m_news` DROP PRIMARY KEY, ADD PRIMARY KEY(`news_id`)");
-mysql_query("ALTER TABLE `m_patient_fp_dropout` DROP PRIMARY KEY, ADD PRIMARY KEY(`dropout_id`)");
-mysql_query("ALTER TABLE `m_patient_fp_method` DROP PRIMARY KEY, ADD PRIMARY KEY(`fp_px_id`)");
-mysql_query("ALTER TABLE `m_patient_fp_method_service` DROP PRIMARY KEY, ADD PRIMARY KEY(`fp_service_id`)");
-mysql_query("ALTER TABLE `m_dental_other_services` DROP PRIMARY KEY, ADD PRIMARY KEY(`record_number`)");
-mysql_query("ALTER TABLE `m_dental_patient_ohc` DROP PRIMARY KEY, ADD PRIMARY KEY(`ohc_id`)");
-mysql_query("ALTER TABLE `m_dental_patient_ohc_table_a` DROP PRIMARY KEY, ADD PRIMARY KEY(`ohc_table_id`)");
-mysql_query("ALTER TABLE `m_dental_services` DROP PRIMARY KEY, ADD PRIMARY KEY(`service_id`)");
 */
 ?>
 
@@ -135,6 +123,8 @@ small { font-family: verdana, sans serif}
 <script language="JavaScript" src="../ts_picker4.js"></script>
 <script language="JavaScript" src="../js/functions.js"></script>
 
+<script language="JavaScript" src="../js/jquery.min.js"></script>
+<script language="JavaScript" src="../js/jquery.validate.min.js"></script>
 
 <body text="black" bgcolor="#FFFFCC" link="black" vlink="black">
 <?php        
